@@ -95,7 +95,8 @@ class Scanner {
           line++;
           break;
 
-        case '"': string(); break;
+        case '"': 
+        string(); break;
 
         default:
         if (isDigit(c)) {
@@ -138,7 +139,7 @@ class Scanner {
   }
 
   private void string() {
-    while (peek() != '"' && !isAtEnd()) {
+    while (peek() != '"' && !isAtEnd() && peek() !='\"') {
       if (peek() == '\n') line++;
       advance();
     }
