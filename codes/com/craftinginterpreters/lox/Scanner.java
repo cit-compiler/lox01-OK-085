@@ -139,10 +139,16 @@ class Scanner {
   }
 
   private void string() {
-    while (peek() != '"' && !isAtEnd() && peek() !='\"') {
-      if (peek() == '\n') line++;
-      advance();
-    }
+    while (peek() != '"' && !isAtEnd()) {
+      if (peek() == '\\' && peekNext() == '"') {
+          // Skip the escape sequence \".
+          advance(); // Skip the backslash.
+          advance(); // Skip the escaped quote.
+      } else {
+          if (peek() == '\n') line++;
+          advance();
+      }
+  }
 
     if (isAtEnd()) {
       Lox.error(line, "Unterminated string.");
@@ -153,7 +159,7 @@ class Scanner {
     advance();
 
     // Trim the surrounding quotes.
-    String value = source.substring(start + 1, current - 1);
+    String value = source.substring(start + 1, current - 1).replace("\\\"", "\"");
     addToken(STRING, value);
   }
 
